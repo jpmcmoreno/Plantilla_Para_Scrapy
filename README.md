@@ -1,33 +1,27 @@
 # Plantilla_Para_Scrapy
 
-Tabla de Comandos de Inspección (Scrapy Shell)
-Objetivo	Comando / Selector	Qué extrae exactamente
-Ver la web	view(response)	Abre el HTML que Scrapy descargó en tu navegador.
-Título Principal	response.css('h1::text').get()	El texto del encabezado más importante.
-Contenedor	response.css('.nombre-clase')	Selecciona el bloque que encierra la noticia.
-Párrafos Limpios	response.css('p *::text').getall()	Todo el texto dentro de párrafos (incluye negritas/links).
-Atributo (URL)	response.css('a::attr(href)').get()	El link de un enlace.
-Atributo (Imagen)	response.css('img::attr(src)').get()	La ruta de una imagen.
-Clase específica	response.css('etiqueta.clase::text')	Filtra por el nombre exacto de la clase CSS.
-Varios niveles	response.css('div.padre a.hijo')	Busca un enlace que esté dentro de un div específico.
-Tipos de "Selectores de Texto" (El detalle fino)
-A veces el texto está escondido o mezclado. Usa estas variantes según lo que veas en la inspección:
+<img width="732" height="622" alt="image" src="https://github.com/user-attachments/assets/9764246a-870c-40df-8e7a-c5ef2fe178e9" />
 
-::text: Trae solo el texto directo de la etiqueta (si hay un link adentro, lo ignora).
+<img width="726" height="487" alt="image" src="https://github.com/user-attachments/assets/108744ba-7b53-429c-a2c4-b7e44aa4d36f" />
 
- *::text: (Con espacio y asterisco) Trae todo el texto que esté dentro de esa etiqueta y de todas sus etiquetas hijas. Es el más seguro para sacar el cuerpo de una noticia.
+<img width="775" height="791" alt="image" src="https://github.com/user-attachments/assets/d251361e-7a96-4e2c-8d09-0c92233817e1" />
 
-.get(): Te da un solo resultado (el primero que encuentre).
+<img width="1478" height="810" alt="image" src="https://github.com/user-attachments/assets/086ed4be-9d8e-46da-830e-2c8510e65b1f" />
 
-.getall(): Te devuelve una lista de Python con todos los resultados que coincidan.
 
-Cómo leer el HTML rápido
-Cuando hagas clic derecho e "Inspeccionar", fíjate en este orden para llenar tu tabla:
+import scrapy
 
-¿Tiene ID? (Ej: id="noticia-principal"). Usa #noticia-principal. Es lo más rápido.
+class NoticiaSpider(scrapy.Spider):
+    name = "noticias"
+    allowed_domains = ["elorientaldemonagas.com"]
+    start_urls = ["https://elorientaldemonagas.com/atletico-la-cruz-listo-para-el-torneo-apertura-2024/"]
 
-¿Tiene Clase? (Ej: class="entry-content"). Usa .entry-content.
+    def parse(self, response):
+        # Seccion de extracción (lo que probamos en el shell)
+        yield {
+            'titulo': response.css('h1.entry-title::text').get(),
+            'cuerpo': "\n".join(response.css('.entry-content p *::text').getall()),
+            'url_original': response.url
+        }
 
-¿Es una etiqueta única? (Ej: <footer>). Usa simplemente footer.
-
-¿Hay algún otro elemento de esa página que te esté costando atrapar o con estos ya cubres todo lo que necesitas?
+  <img width="1448" height="537" alt="image" src="https://github.com/user-attachments/assets/2faa80ae-beb7-4d68-917f-6498fd49f984" />
