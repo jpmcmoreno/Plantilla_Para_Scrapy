@@ -8,7 +8,7 @@
 
 <img width="1478" height="810" alt="image" src="https://github.com/user-attachments/assets/086ed4be-9d8e-46da-830e-2c8510e65b1f" />
 
-
+```python
 import scrapy
 
 class NoticiaSpider(scrapy.Spider):
@@ -23,5 +23,6 @@ class NoticiaSpider(scrapy.Spider):
             'cuerpo': "\n".join(response.css('.entry-content p *::text').getall()),
             'url_original': response.url
         }
+```
 
   <img width="1448" height="537" alt="image" src="https://github.com/user-attachments/assets/2faa80ae-beb7-4d68-917f-6498fd49f984" />
